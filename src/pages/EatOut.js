@@ -85,10 +85,10 @@ export default function EatOut() {
 
   // Updated reverseGeocode function using OpenCage Geocoder API
   const reverseGeocode = async (latitude, longitude) => {
-    const apiKey = 'ba2c4d21f0a546fea0a17ae2d61737e6'; // Replace with your actual API key
+    
     try {
       const response = await fetch(
-        `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}`
+        `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${process.env.REACT_APP_newapiKey}`
       );
       const data = await response.json();
       if (data && data.results && data.results.length > 0) {
