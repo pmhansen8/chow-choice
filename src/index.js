@@ -10,6 +10,9 @@ import EatOut from './pages/EatOut';
 import EatIn from './pages/EatIn';
 import Profile from './pages/Profile';
 import SavedItems from './pages/SavedItems';
+import About from './pages/About';
+import HowTo from './pages/HowTo';
+import Settings from './pages/Settings';
 
 ReactDOM.render(
     <Router>
@@ -22,6 +25,9 @@ ReactDOM.render(
             <Route path="/eat-in" element={<EatIn />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/saved-items" element={<SavedItems />} />
+            <Route path='/about' element={<About/>}/>
+            <Route path='/how-to' element={<HowTo/>}/>
+            <Route path="settings" element={<Settings/>}/>
         </Routes>
     </Router>,
     document.getElementById('root')

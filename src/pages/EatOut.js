@@ -88,7 +88,7 @@ export default function EatOut() {
     
     try {
       const response = await fetch(
-        `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${process.env.REACT_APP_newapiKey}`
+        `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${process.env.REACT_APP_newapikey}`
       );
       const data = await response.json();
       if (data && data.results && data.results.length > 0) {
