@@ -3,6 +3,79 @@ import Navbar from '../components/navbar';
 import { auth, database } from '../config'; 
 import { ref, get } from 'firebase/database';
 
+
+const RecipeCard = ({ recipe }) => {
+    // Function to parse the recipe string
+    const parseRecipe = (recipeStr) => {
+      const nameMatch = recipeStr.match(/\d+\.\s\*\*(.*?)\*\*/);
+      const ingredientsMatch = recipeStr.match(/\*\*Ingredients:\*\*(.*?)\*\*Instructions:/s);
+      const instructionsMatch = recipeStr.match(/\*\*Instructions:\*\*(.*)/s);
+  
+      const name = nameMatch ? nameMatch[1] : 'Unnamed Recipe';
+      const ingredients = ingredientsMatch ? ingredientsMatch[1].trim().split('\n- ') : [];
+      const instructions = instructionsMatch ? instructionsMatch[1].trim().split('\n').filter(line => line) : [];
+  
+      return { name, ingredients, instructions };
+    };
+  
+    const { name, ingredients, instructions } = parseRecipe(recipe);
+  
+    return (
+      <div style={newstyles.card}>
+        <h2 style={newstyles.recipeName}>{name}</h2>
+  
+        <div style={newstyles.section}>
+          <h3 style={{color: "black"}}>Ingredients:</h3>
+          <ul>
+            {ingredients.map((ingredient, idx) => (
+              <li key={idx} style={{color: "black"}}>{ingredient.replace(/^- /, '')}</li>
+            ))}
+          </ul>
+        </div>
+  
+        <div style={newstyles.section}>
+          <h3 style={{color: "black"}}>Instructions:</h3>
+          <ol>
+            {instructions.map((instruction, idx) => (
+              <li key={idx} style={{color: "black"}}>{instruction.replace(/^\d+\.\s*/, '')}</li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    );
+  };
+  
+  const newstyles = {
+    card: {
+      width: '50%',
+      maxWidth: '600px',
+      margin: '20px',
+      padding: '20px',
+      backgroundColor: '#fff',
+      borderRadius: '10px',
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+      position: 'relative',
+      transition: 'transform 0.2s, box-shadow 0.2s',
+    },
+    recipeName: {
+      color: '#333',
+      marginBottom: '15px',
+    },
+    section: {
+      marginBottom: '15px',
+    },
+    saveButton: {
+      padding: '10px 15px',
+      backgroundColor: '#28a745', 
+      color: '#fff',
+      border: 'none',
+      borderRadius: '5px',
+      cursor: 'pointer',
+    },
+  };
+  
+
+
 export default function SavedItems() {
     const [recipes, setRecipes] = useState([]);
     const [restaurants, setRestaurants] = useState([]);
@@ -76,19 +149,15 @@ export default function SavedItems() {
                 
                 <section style={styles.section}>
                     <h2 style={styles.heading}>Saved Recipes</h2>
-                    {recipes.length > 0 ? (
-                        <div style={styles.grid}>
-                            {recipes.map((recipe, index) => (
-                                <div key={index} style={styles.card}>
-                                    <h3 style={styles.cardTitle}>{recipe.name || `Recipe ${index + 1}`}</h3>
-                                    <p style={styles.cardContent}>{recipe.description || 'No description available.'}</p>
-                                    {/* Add more details as needed */}
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <p>No saved recipes.</p>
-                    )}
+                    <div style={styles.recipesContainer}>
+          {recipes.length > 0 ? (
+            recipes.map((recipe, index) => (
+              <RecipeCard key={index} recipe={recipe}  />
+            ))
+          ) : (
+            <p>No recipes to display.</p>
+          )}
+        </div>
                 </section>
             </div>
         </>
@@ -122,7 +191,7 @@ const styles = {
     heading: {
         textAlign: "center",
         marginBottom: "20px",
-        color: "#333",
+        color: "black",
     },
     grid: {
         display: "flex",
@@ -142,11 +211,11 @@ const styles = {
     cardTitle: {
         margin: "0 0 10px 0",
         fontSize: "1.2em",
-        color: "#ff4d4d",
+        color: "black",
     },
     cardContent: {
         margin: 0,
-        color: "#555",
+        color: "black",
     },
 };
 
